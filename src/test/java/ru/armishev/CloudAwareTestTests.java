@@ -1,10 +1,10 @@
-package com.example.demo;
+package ru.armishev;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class CloudAwareTestTests {
 
 	@Test
 	void contextLoads() {
