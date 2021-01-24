@@ -88,19 +88,6 @@ public class AmazonObjectEntity {
         this.storageClass = storageClass;
     }
 
-    public static AmazonObjectEntity convertFromAmazon(S3ObjectSummary objectSummary) {
-        AmazonObjectEntity amazonObjectEntity = new AmazonObjectEntity();
-
-        amazonObjectEntity.setKey(objectSummary.getKey());
-        amazonObjectEntity.setLastModified(objectSummary.getLastModified());
-        amazonObjectEntity.setETag(objectSummary.getETag());
-        amazonObjectEntity.setSize(objectSummary.getSize());
-        amazonObjectEntity.setOwner(AmazonObjectOwnerEntity.convertFromAmazon(objectSummary.getOwner()));
-        amazonObjectEntity.setStorageClass(objectSummary.getStorageClass());
-
-        return amazonObjectEntity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

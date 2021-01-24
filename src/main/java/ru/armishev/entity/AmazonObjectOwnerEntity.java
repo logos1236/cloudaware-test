@@ -33,14 +33,6 @@ public class AmazonObjectOwnerEntity {
         this.displayName = displayName;
     }
 
-    public static AmazonObjectOwnerEntity convertFromAmazon(Owner objectOwner) {
-        AmazonObjectOwnerEntity amazonObjectOwnerEntity = new AmazonObjectOwnerEntity();
-        amazonObjectOwnerEntity.setId(objectOwner.getId());
-        amazonObjectOwnerEntity.setDisplayName(objectOwner.getDisplayName());
-
-        return amazonObjectOwnerEntity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
