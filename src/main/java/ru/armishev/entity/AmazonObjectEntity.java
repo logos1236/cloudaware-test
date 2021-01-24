@@ -3,6 +3,8 @@ package ru.armishev.entity;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -28,13 +30,9 @@ public class AmazonObjectEntity {
     @Min(1)
     private Long size;
 
-    /*@ManyToOne(fetch = FetchType.EAGER)
-    @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "owner", insertable = true, updatable = true)*/
-    //@OneToOne(cascade = CascadeType.ALL)
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "owner", referencedColumnName = "id", insertable = true, updatable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private AmazonObjectOwnerEntity owner;
 
     @Column(name = "storageClass")
