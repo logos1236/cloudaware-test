@@ -1,35 +1,135 @@
 package ru.armishev.service;
 
-import com.amazonaws.services.s3.model.ObjectListing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import ru.armishev.cron.AmazonDownloadScheduler;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.entity.AmazonObjectOwnerEntity;
+import ru.armishev.jpa.AmazonObjectJPA;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
 public class AmazonEntityMock implements IAmazonEntity {
+    private final AmazonService amazonService;
+    private final AmazonObjectJPA amazonObjectJPA;
+    private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
+    private static final long cm = System.currentTimeMillis();
+    private static boolean isAlreadyAdd = false;
+
+    @Autowired
+    public AmazonEntityMock(AmazonService amazonService, AmazonObjectJPA amazonObjectJPA) {
+        this.amazonService = amazonService;
+        this.amazonObjectJPA = amazonObjectJPA;
+    }
+
     @Override
-    public List<AmazonObjectEntity> getList() {
+    public void updateList() {
+        List<AmazonObjectEntity> rawList = this.getListFromAmazon();
+        List<AmazonObjectEntity> currentDatabaseList = amazonObjectJPA.findAll();
+
+        addOrUpdateObjFromDatabase(rawList, currentDatabaseList);
+        deleteNotExistedObjFromDatabase(rawList, currentDatabaseList);
+    }
+
+    private void addOrUpdateObjFromDatabase(List<AmazonObjectEntity> rawList, List<AmazonObjectEntity> currentDatabaseList) {
+        List<AmazonObjectEntity> listForAddOrUpdate = new ArrayList<>();
+
+        listForAddOrUpdate = rawList.stream()
+                .filter(rawObject -> {
+                    boolean needAddObj = false;
+
+                    int indexOfDatabaseObj = currentDatabaseList.indexOf(rawObject);
+                    logger.info("indexOfDatabaseObj: "+indexOfDatabaseObj);
+
+                    if (indexOfDatabaseObj < 0) {
+                        needAddObj = true;
+                    } else {
+                        AmazonObjectEntity currentDatabaseObject = currentDatabaseList.get(indexOfDatabaseObj);
+                        if (currentDatabaseObject.getLastModified().compareTo(rawObject.getLastModified()) != 0) {
+                            logger.info(currentDatabaseObject.getLastModified()+" : "+rawObject.getLastModified());
+                            needAddObj = true;
+                        }
+                    }
+
+                    return needAddObj;
+                })
+                .collect(Collectors.toList());
+
+        if (!listForAddOrUpdate.isEmpty()) {
+            amazonObjectJPA.saveAll(listForAddOrUpdate);
+
+            logger.info("Save new objects to database: "+listForAddOrUpdate.size());
+        }
+    }
+
+    private void deleteNotExistedObjFromDatabase(List<AmazonObjectEntity> rawList, List<AmazonObjectEntity> currentDatabaseList) {
+        List<AmazonObjectEntity> listForDelete = new ArrayList<>();
+        listForDelete = currentDatabaseList.stream()
+                .filter(aObject -> {
+                    return !rawList.contains(aObject);
+                })
+                .collect(Collectors.toList());
+
+        if (!listForDelete.isEmpty()) {
+            amazonObjectJPA.deleteAll(listForDelete);
+
+            logger.info("Delete not existed in s3 objects from database: "+listForDelete.size());
+        }
+    }
+
+    private List<AmazonObjectEntity> getListFromAmazon() {
         List<AmazonObjectEntity> result = new ArrayList<>();
 
         AmazonObjectOwnerEntity amazonObjectOwnerEntity = new AmazonObjectOwnerEntity();
         amazonObjectOwnerEntity.setId("12");
         amazonObjectOwnerEntity.setDisplayName("amazonObjectOwnerEntity");
 
+        //
         AmazonObjectEntity newAmazonObjectEntity = new AmazonObjectEntity();
         newAmazonObjectEntity.setKey("1");
-        newAmazonObjectEntity.setLastModified(new Date());
+        newAmazonObjectEntity.setLastModified(new Date(System.currentTimeMillis()));
         newAmazonObjectEntity.setETag("ETag");
         newAmazonObjectEntity.setSize(12L);
         newAmazonObjectEntity.setStorageClass("Test");
         newAmazonObjectEntity.setOwner(amazonObjectOwnerEntity);
-
         result.add(newAmazonObjectEntity);
+
+        //
+        AmazonObjectEntity newAmazonObjectEntityStatic = new AmazonObjectEntity();
+        newAmazonObjectEntityStatic.setKey("3");
+        newAmazonObjectEntityStatic.setLastModified(new Date(cm));
+        newAmazonObjectEntityStatic.setETag("ETag");
+        newAmazonObjectEntityStatic.setSize(12L);
+        newAmazonObjectEntityStatic.setStorageClass("Test Static");
+        newAmazonObjectEntityStatic.setOwner(amazonObjectOwnerEntity);
+        result.add(newAmazonObjectEntityStatic);
+
+        //
+        if (!isAlreadyAdd) {
+            AmazonObjectEntity newAmazonObjectEntityDeleted = new AmazonObjectEntity();
+            newAmazonObjectEntityDeleted.setKey("2");
+            newAmazonObjectEntityDeleted.setLastModified(new Date(cm));
+            newAmazonObjectEntityDeleted.setETag("ETag");
+            newAmazonObjectEntityDeleted.setSize(12L);
+            newAmazonObjectEntityDeleted.setStorageClass("Test Static");
+            newAmazonObjectEntityDeleted.setOwner(amazonObjectOwnerEntity);
+            result.add(newAmazonObjectEntityDeleted);
+
+            isAlreadyAdd = true;
+        }
+
 
         return result;
     }

@@ -1,4 +1,4 @@
-package ru.armishev.scheduler;
+package ru.armishev.cron;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,25 +13,17 @@ import java.util.List;
 
 @Component
 public class AmazonDownloadScheduler {
-    private final AmazonObjectJPA amazonObjectJPA;
     private final IAmazonEntity amazonEntity;
 
     private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
 
     @Autowired
-    public AmazonDownloadScheduler(AmazonObjectJPA amazonObjectJPA, IAmazonEntity amazonEntity) {
-        this.amazonObjectJPA = amazonObjectJPA;
+    public AmazonDownloadScheduler(IAmazonEntity amazonEntity) {
         this.amazonEntity = amazonEntity;
     }
 
     @Scheduled(fixedDelay = 5000)
     public void myScheduler() {
-        List<AmazonObjectEntity> listForSave = amazonEntity.getList();
-
-        if (!listForSave.isEmpty()) {
-            amazonObjectJPA.saveAll(listForSave);
-        }
-
-        logger.info("Download amazon");
+        amazonEntity.updateList();
     }
 }

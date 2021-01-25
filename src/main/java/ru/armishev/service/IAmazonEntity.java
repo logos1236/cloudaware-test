@@ -6,5 +6,5 @@ import ru.armishev.entity.AmazonObjectEntity;
 import java.util.List;
 
 public interface IAmazonEntity {
-    List<AmazonObjectEntity> getList();
+    void updateList();
 }
