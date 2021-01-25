@@ -1,0 +1,122 @@
+html, body {
+    height: 100%;
+    background:#a5a5a5;
+    font-size:18px;
+}
+
+h1 {
+    font-size:30px;
+    color:#000;
+    margin:0px 0px 30px 0px;
+}
+
+h2 {
+    font-size:26px;
+    color:#000;
+    margin:0px 0px 20px 0px;
+}
+
+#main_section {
+    background:#fff;
+    width:640px;
+    margin:0px auto;
+    min-height: 100%;
+    padding:40px 35px;
+    text-align:center;
+
+    box-sizing:border-box;
+
+    -webkit-box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 0px 0px 10px 5px rgba(0,0,0,0);
+    box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 0px 0px 10px 5px rgba(0,0,0,0);
+}
+
+#htmlPet {
+    margin:0px 0px 20px 0px;
+}
+
+#htmlPetLife {
+    height:100px;
+    box-sizing:border-box;
+    padding:5px;
+    overflow-y:scroll;
+    border: 1px solid #b5b5b5;
+}
+
+.btn {
+	box-shadow:inset 0px 1px 0px 0px #54a3f7;
+	background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+	background-color:#007dc1;
+	border-radius:3px;
+	border:1px solid #124d77;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #154682;
+	box-sizing:border-box;
+	height:33px;
+}
+.btn:hover {
+	background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+	background-color:#0061a7;
+}
+.btn:active {
+	position:relative;
+	top:1px;
+}
+
+.css-input {
+     padding: 5px;
+     border-width: 1px;
+     border-color: #CCCCCC;
+     background-color: #FFFFFF;
+     color: #000000;
+     border-style: solid;
+     border-radius: 9px;
+     box-shadow: 0px 0px 5px rgba(66,66,66,.75);
+     box-sizing:border-box;
+     height:33px;
+}
+.css-input:focus {
+     outline:none;
+}
+
+.control_bar_pet {
+    margin:0px auto 20px auto;
+}
+.control_bar_pet ul {
+    list-style:none;
+    display:inline;
+    padding: 0px;
+}
+.control_bar_pet ul li {
+    display:inline-block;
+    margin:0px 10px;
+}
+
+.status_bar_pet {
+    text-align:left;
+}
+.status_bar_pet ul {
+    display:inline;
+    padding: 0px;
+    list-style: inside;
+}
+.status_bar_pet ul li {
+    display:block;
+    margin:10px 0px;
+    font-weight:bold;
+}
+
+.status_bar_pet .escape {
+    font-size:22px;
+    color:#f00;
+    font-weight:bold;
+    text-align:center;
+}
+
+.pet_login_section {
+    margin-bottom:30px;
+}
