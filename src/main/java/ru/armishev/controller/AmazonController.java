@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Controller
@@ -24,8 +25,7 @@ public class AmazonController {
     }
 
     @GetMapping("")
-    public String getList(Model model, @RequestParam(name = "page", required = false) Integer page) {
-        page = (page == null) ? 0 : page;
+    public String getList(Model model, @RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int page) {
         Pageable firstPageWithTwoElements = PageRequest.of(page, 1);
 
         model.addAttribute("listS3", amazonObjectJPA.findAll(firstPageWithTwoElements));
