@@ -30,16 +30,40 @@ h2 {
     box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 0px 0px 10px 5px rgba(0,0,0,0);
 }
 
-#htmlPet {
-    margin:0px 0px 20px 0px;
+table {
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-color: inherit;
+    vertical-align: inherit;
+    text-align: left;
+    font-weight: inherit;
+    -webkit-border-horizontal-spacing: 0;
+    -webkit-border-vertical-spacing: 0;
 }
 
-#htmlPetLife {
-    height:100px;
-    box-sizing:border-box;
-    padding:5px;
-    overflow-y:scroll;
-    border: 1px solid #b5b5b5;
+.s3_list table {
+    width:100%;
+}
+
+.s3_list .empty {
+    margin: 20px 0px;
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.s3_list th, .s3_list td {
+    border: 1px solid #000;
+    padding: 5px;
+}
+
+.s3_list th {
+    text-align:center;
+    font-weight:bold;
 }
 
 .btn {
@@ -81,42 +105,4 @@ h2 {
 }
 .css-input:focus {
      outline:none;
-}
-
-.control_bar_pet {
-    margin:0px auto 20px auto;
-}
-.control_bar_pet ul {
-    list-style:none;
-    display:inline;
-    padding: 0px;
-}
-.control_bar_pet ul li {
-    display:inline-block;
-    margin:0px 10px;
-}
-
-.status_bar_pet {
-    text-align:left;
-}
-.status_bar_pet ul {
-    display:inline;
-    padding: 0px;
-    list-style: inside;
-}
-.status_bar_pet ul li {
-    display:block;
-    margin:10px 0px;
-    font-weight:bold;
-}
-
-.status_bar_pet .escape {
-    font-size:22px;
-    color:#f00;
-    font-weight:bold;
-    text-align:center;
-}
-
-.pet_login_section {
-    margin-bottom:30px;
 }
