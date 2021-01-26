@@ -1,6 +1,7 @@
 package ru.armishev.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping(value="/list")
 public class AmazonController {
     private final AmazonObjectJPA amazonObjectJPA;
+    private static final int countObjOnPage = 1;
 
     @Autowired
     public AmazonController(AmazonObjectJPA amazonObjectJPA) {
@@ -25,10 +27,13 @@ public class AmazonController {
     }
 
     @GetMapping("")
-    public String getList(Model model, @RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int page) {
-        Pageable firstPageWithTwoElements = PageRequest.of(page, 1);
+    public String getList(Model model, @RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int currentPage) {
+        Pageable firstPageWithTwoElements = PageRequest.of(currentPage, countObjOnPage);
+        Page<AmazonObjectEntity> page = amazonObjectJPA.findAll(firstPageWithTwoElements);
 
-        model.addAttribute("listS3", amazonObjectJPA.findAll(firstPageWithTwoElements));
+        model.addAttribute("listS3", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
 
         return "list";
     }

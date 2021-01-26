@@ -15,21 +15,18 @@
     <!-- endbower-->
     <link rel="stylesheet" type="text/css" th:href="@{/dev/css/normalize.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/dev/css/main.css}" />
+</head>
+<body>
+
+
+<div id="footer" th:fragment="footer">
     <!-- bower:js-->
     <script th:src="@{/dev/bower_components/jquery/dist/jquery.min.js}"></script>
     <script th:src="@{/dev/bower_components/toastr/toastr.js}"></script>
     <!-- endbower-->
     <script type="text/javascript" th:src="@{/dev/js/constant.js}"></script>
     <script type="text/javascript" th:src="@{/dev/js/toastr.js}"></script>
-
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-
-
-<div th:fragment="footer">
+    <script type="text/javascript" th:src="@{/dev/js/main.js}"></script>
 </div>
 </body>
 </html>

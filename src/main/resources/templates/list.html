@@ -10,31 +10,43 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Key</th>
-                    <th>Last Modified</th>
-                    <th>eTag</th>
-                    <th>Size</th>
-                    <th>Owner</th>
-                    <th>Storage Class</th>
+                    <th class="td_key">Key</th>
+                    <th class="td_last_modified">Last Modified</th>
+                    <th class="td_eTag">eTag</th>
+                    <th class="td_size">Size</th>
+                    <th class="td_owner">Owner</th>
+                    <th class="td_storage_class">Storage Class</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="s3obj : ${listS3}">
-                    <td><span th:text="${s3obj.getKey()}"> key </span></td>
-                    <td><span th:text="${s3obj.getLastModified()}"> lastModified </span></td>
-                    <td><span th:text="${s3obj.getETag()}"> eTag </span></td>
-                    <td><span th:text="${s3obj.getSize()}"> size </span></td>
-                    <td>
+                    <td class="td_key"><span th:text="${s3obj.getKey()}"> key </span></td>
+                    <td class="td_last_modified"><span th:text="${s3obj.getLastModified()}"> lastModified </span></td>
+                    <td class="td_eTag"><span th:text="${s3obj.getETag()}"> eTag </span></td>
+                    <td class="td_size"><span th:text="${s3obj.getSize()}"> size </span></td>
+                    <td class="td_owner">
                         <b>id: <span th:text="${s3obj.getOwner().getId()}"> owner id</span></b><br>
                         <span>name: <span th:text="${s3obj.getOwner().getDisplayName()}"> owner display name</span></span>
                     </td>
-                    <td><span th:text="${s3obj.getStorageClass()}"> storageClass </span></td>
+                    <td class="td_storage_class"><span th:text="${s3obj.getStorageClass()}"> storageClass </span></td>
                 </tr>
                 </tbody>
             </table>
 
             <div class="empty" th:if="${listS3.empty}">
                 <td colspan="2"> No s3 objects Available </td>
+            </div>
+
+            <div class="pagination-block" th:if="${totalPages > 0 && !listS3.empty}">
+                <form class="service-pagination-form" action="" method="GET" autocomplete="off">
+                    <label>
+                        <span>Страница:</span>
+                        <select name="page" class="">
+                            <option th:each="i: ${#numbers.sequence(0, totalPages-1)}" th:text="${i+1}" th:value="${i}" th:selected="${i==currentPage}"></option>
+                        </select>
+                        <span>из <span th:text="${totalPages}"></span></span>
+                    </label>
+                </form>
             </div>
         </section>
     </section>

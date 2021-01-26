@@ -93,16 +93,16 @@ public class AmazonEntityMock implements IAmazonEntity {
         List<AmazonObjectEntity> result = new ArrayList<>();
 
         AmazonObjectOwnerEntity amazonObjectOwnerEntity = new AmazonObjectOwnerEntity();
-        amazonObjectOwnerEntity.setId("12");
-        amazonObjectOwnerEntity.setDisplayName("amazonObjectOwnerEntity");
+        amazonObjectOwnerEntity.setId("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
+        amazonObjectOwnerEntity.setDisplayName("malammik");
 
         //
         AmazonObjectEntity newAmazonObjectEntity = new AmazonObjectEntity();
-        newAmazonObjectEntity.setKey("1");
+        newAmazonObjectEntity.setKey("file_2015-08-06.txt");
         newAmazonObjectEntity.setLastModified(new Date(System.currentTimeMillis()));
-        newAmazonObjectEntity.setETag("ETag");
+        newAmazonObjectEntity.setETag("&quot;090228db8da1203d89d73341c95932b4&quot;");
         newAmazonObjectEntity.setSize(12L);
-        newAmazonObjectEntity.setStorageClass("Test");
+        newAmazonObjectEntity.setStorageClass("STANDARD");
         newAmazonObjectEntity.setOwner(amazonObjectOwnerEntity);
         result.add(newAmazonObjectEntity);
 

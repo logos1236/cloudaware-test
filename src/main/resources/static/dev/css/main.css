@@ -18,7 +18,9 @@ h2 {
 
 #main_section {
     background:#fff;
-    width:640px;
+    min-width: 640px;
+    width: 70%;
+    max-width: 1260px;
     margin:0px auto;
     min-height: 100%;
     padding:40px 35px;
@@ -48,6 +50,10 @@ table {
     width:100%;
 }
 
+.pagination-block {
+    margin: 20px 0px;
+}
+
 .s3_list .empty {
     margin: 20px 0px;
     font-size: 18px;
@@ -64,6 +70,34 @@ table {
 .s3_list th {
     text-align:center;
     font-weight:bold;
+}
+
+.s3_list .td_key {
+    width:15%;
+    text-align:center;
+}
+.s3_list .td_last_modified {
+    width:25%;
+    text-align:center;
+}
+.s3_list .td_eTag {
+    width:20%;
+}
+.s3_list .td_eTag span {
+    word-break: break-all;
+}
+.s3_list .td_size {
+    width:10%;
+    text-align:center;
+}
+.s3_list .td_owner {
+    width:30%;
+}
+.s3_list .td_owner span {
+    word-break: break-all;
+}
+.s3_list .td_storage_class {
+    width:10%;
 }
 
 .btn {
