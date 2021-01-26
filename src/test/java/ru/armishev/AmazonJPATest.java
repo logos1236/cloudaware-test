@@ -1,6 +1,8 @@
 package ru.armishev;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -21,6 +23,11 @@ public class AmazonJPATest {
     private final AmazonObjectJPA amazonObjectJPA;
     private final AmazonEntityTestMock amazonEntity;
 
+    @BeforeAll
+    public void clearDatabase() {
+        amazonObjectJPA.deleteAll();
+    }
+
     @Autowired
     public AmazonJPATest(AmazonObjectJPA amazonObjectJPA) {
         this.amazonObjectJPA = amazonObjectJPA;
@@ -28,11 +35,29 @@ public class AmazonJPATest {
     }
 
     @Test
-    public void downloadS3ObjTest() {
+    public void emptyDatabaseTest() {
+        List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
+
+        Assert.assertEquals(0, databaseList.size());
+    }
+
+    @Test
+    public void download3ObjTest() {
         amazonEntity.updateList();
 
         List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
 
         Assert.assertEquals(3, databaseList.size());
+    }
+
+    @Test
+    public void downloadOneObjLessTest() {
+        amazonEntity.updateList();
+
+        amazonEntity.updateList2Elements();
+
+        List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
+
+        Assert.assertEquals(2, databaseList.size());
     }
 }
