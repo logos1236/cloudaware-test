@@ -38,5 +38,5 @@ build/
 *.log
 
 ### Download directory ###
-/src/main/resources/upload
-/src/test/resources/upload
+/src/main/resources/log
+/src/test/resources/log
