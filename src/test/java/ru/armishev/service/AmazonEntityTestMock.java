@@ -3,7 +3,6 @@ package ru.armishev.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.armishev.cron.AmazonDownloadScheduler;
 import ru.armishev.entity.AmazonObjectEntity;
@@ -11,24 +10,18 @@ import ru.armishev.entity.AmazonObjectOwnerEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
 
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
-@Service
-@Primary
-public class AmazonEntityMock implements IAmazonEntity {
+public class AmazonEntityTestMock implements IAmazonEntity {
     private final AmazonObjectJPA amazonObjectJPA;
     private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
     private static final long cm = System.currentTimeMillis();
     private static boolean isAlreadyAdd = false;
 
     @Autowired
-    public AmazonEntityMock(AmazonObjectJPA amazonObjectJPA) {
+    public AmazonEntityTestMock(AmazonObjectJPA amazonObjectJPA) {
         this.amazonObjectJPA = amazonObjectJPA;
     }
 

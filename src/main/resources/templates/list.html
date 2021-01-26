@@ -38,10 +38,10 @@
             </div>
 
             <div class="pagination-block" th:if="${totalPages > 0 && !listS3.empty}">
-                <form class="service-pagination-form" action="" method="GET" autocomplete="off">
+                <form class="ru.armishev.service-pagination-form" action="" method="GET" autocomplete="off">
                     <label>
                         <span>Страница:</span>
-                        <select name="page" class="">
+                        <select name="page">
                             <option th:each="i: ${#numbers.sequence(0, totalPages-1)}" th:text="${i+1}" th:value="${i}" th:selected="${i==currentPage}"></option>
                         </select>
                         <span>из <span th:text="${totalPages}"></span></span>
