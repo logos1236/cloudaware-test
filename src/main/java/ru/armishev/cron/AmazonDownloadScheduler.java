@@ -14,7 +14,7 @@ public class AmazonDownloadScheduler {
         this.amazonEntitySync = amazonEntitySync;
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 30000)
     public void myScheduler() {
         amazonEntitySync.updateList();
     }

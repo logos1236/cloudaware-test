@@ -43,8 +43,8 @@
                 <div class="s3_list_elem_property">
                     <div class="s3_list_elem_property_name">Owner:</div>
                     <div class="s3_list_elem_property_value">
-                        <b>Id:</b> <span th:text="${s3obj.getOwner().getKey()}"> ownerEntity id</span><br>
-                        <b>Name:</b> <span th:text="${s3obj.getOwner().getDisplayName()}"> ownerEntity display name</span>
+                        <b>Id:</b> <span th:if="${s3obj.getOwner() != null}" th:text="${s3obj.getOwner().getKey()}"> ownerEntity id</span><br>
+                        <b>Name:</b> <span th:if="${s3obj.getOwner() != null}" th:text="${s3obj.getOwner().getDisplayName()}"> ownerEntity display name</span>
                     </div>
                 </div>
 
@@ -71,8 +71,8 @@
                     <div class="s3_list_elem_property_value">
                         <span th:if="${s3obj.getVersions().empty}">Empty</span>
                         <div class="property_elem" th:each="version : ${s3obj.getVersions()}">
-                            <b>Version:</b> <span th:text="${version.getVersionPK().getVersion()}"></span><br/>
-                            <b>Owner:</b> <span th:text="${version.getOwner().getKey()}"></span><br/>
+                            <span th:if="${version.getVersionPK() != null}"><b>Version:</b> <span th:text="${version.getVersionPK().getVersion()}"></span></span><br/>
+                            <span th:if="${version.getOwner() != null}"><b>Owner:</b> <span th:text="${version.getOwner().getKey()}"></span></span><br/>
                             <b>Latest:</b> <span th:text="${version.isLatest()}"></span><br/>
                             <b>Deleted:</b> <span th:text="${version.isDeleted()}"></span>
                         </div>
