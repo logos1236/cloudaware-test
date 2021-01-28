@@ -68,8 +68,8 @@ public class AmazonService implements IAmazonService {
     }
 
     /*
-        Зацикливаем запрос спсика объектов из Amazon
-        */
+    Зацикливаем запрос объектов из Amazon
+    */
     private void initLoopListObjectsV2Result() {
         if (this.loopListObjectsV2Request == null || !loopListObjectsV2Result.isTruncated()) {
             this.loopListObjectsV2Request = new ListObjectsV2Request().withBucketName(bucketName).withMaxKeys(MAX_DOWNLOAD_CNT);
