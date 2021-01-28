@@ -5,11 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import ru.armishev.cron.AmazonDownloadScheduler;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
 public class AmazonEntitySync implements IAmazonEntitySync {
     private final AmazonService amazonService;
     private final AmazonObjectJPA amazonObjectJPA;
-    private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
+    private final Logger logger = LoggerFactory.getLogger(AmazonEntitySync.class);
 
     @Autowired
     public AmazonEntitySync(AmazonService amazonService, AmazonObjectJPA amazonObjectJPA) {
@@ -53,8 +50,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
         if (!rawList.isEmpty()) {
             amazonObjectJPA.saveAll(rawList);
 
-            logger.info("rawList: "+rawList.size());
-            logger.info("Save new objects to database: "+rawList.size());
+            logger.info(String.format("Save new objects to database: %s", rawList.size()));
         }
     }
 
@@ -62,7 +58,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
     Удаляем из локальной БД информацию о файлах, которых больше нет в Amazon
     */
     private void deleteNotExistedObjectInDatabase(List<String> loopFilesList, List<AmazonObjectEntity> currentDatabaseList) {
-        List<AmazonObjectEntity> listForDelete = new ArrayList<>();
+        List<AmazonObjectEntity> listForDelete;
 
         if (currentDatabaseList.isEmpty()) {
             return;
@@ -81,7 +77,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
         if (!listForDelete.isEmpty()) {
             amazonObjectJPA.deleteAll(listForDelete);
 
-            logger.info("Delete not existed in s3 objects from database: "+listForDelete.size());
+            logger.info(String.format("Delete not existed in s3 objects from database: %s", listForDelete.size()));
         }
     }
 }

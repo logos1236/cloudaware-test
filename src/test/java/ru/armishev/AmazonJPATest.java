@@ -3,6 +3,7 @@ package ru.armishev;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class AmazonJPATest {
     private final AmazonObjectJPA amazonObjectJPA;
     private final AmazonEntitySyncTestMock amazonEntity;
 
-    @Before
+    @BeforeEach
     public void clearDatabase() {
         amazonObjectJPA.deleteAll();
     }
@@ -32,14 +33,14 @@ public class AmazonJPATest {
     }
 
     @Test
-    public void emptyDatabaseTest() {
+    void emptyDatabaseTest() {
         List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
 
         Assert.assertEquals(0, databaseList.size());
     }
 
     @Test
-    public void download3ObjTest() {
+    void download3ObjTest() {
         amazonEntity.updateList();
 
         List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
@@ -48,7 +49,7 @@ public class AmazonJPATest {
     }
 
     @Test
-    public void downloadOneObjLessTest() {
+    void downloadOneObjLessTest() {
         amazonEntity.updateList();
 
         amazonEntity.updateList2Elements();

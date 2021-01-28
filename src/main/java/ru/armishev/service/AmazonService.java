@@ -20,10 +20,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class AmazonService implements IAmazonService {
+    private static final int MAX_DOWNLOAD_CNT = 10;
+    private static final int MAX_DOWNLOAD_CNT_VERSION = 1;
+
     private final Regions clientRegion;
     private final String bucketName;
-    private final static int MAX_DOWNLOAD_CNT = 1000;
-    private final static int MAX_DOWNLOAD_CNT_VERSION = 1;
 
     private AmazonS3 s3Client;
     private ListObjectsV2Result loopListObjectsV2Result;
@@ -37,7 +38,7 @@ public class AmazonService implements IAmazonService {
         this.clientRegion = Regions.fromName(clientRegion);
     }
 
-    private AmazonS3 gets3Client() {
+    private AmazonS3 s3Client() {
         if (this.s3Client == null) {
             this.s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
@@ -70,8 +71,6 @@ public class AmazonService implements IAmazonService {
         Зацикливаем запрос спсика объектов из Amazon
         */
     private void initLoopListObjectsV2Result() {
-        AmazonS3 s3Client = gets3Client();
-
         if (this.loopListObjectsV2Request == null || !loopListObjectsV2Result.isTruncated()) {
             this.loopListObjectsV2Request = new ListObjectsV2Request().withBucketName(bucketName).withMaxKeys(MAX_DOWNLOAD_CNT);
             this.loopListObjectsV2Request.setFetchOwner(true);
@@ -79,7 +78,7 @@ public class AmazonService implements IAmazonService {
             loopFilesList = new ArrayList<>();
         }
 
-        loopListObjectsV2Result = s3Client.listObjectsV2(this.loopListObjectsV2Request);
+        loopListObjectsV2Result = s3Client().listObjectsV2(this.loopListObjectsV2Request);
     }
 
     /*
@@ -94,15 +93,13 @@ public class AmazonService implements IAmazonService {
 
             this.loopListObjectsV2Result.getObjectSummaries().
                     stream().
-                    map((S3ObjectSummary) -> {
-                        //List<Grant> grants = getListAmazonObjectGrants(S3ObjectSummary.getKey());
-                        //List<S3VersionSummary> versions = getListAmazonObjectVersions(S3ObjectSummary.getKey());
-                        List<Grant> grants = new ArrayList<>();
-                        List<S3VersionSummary> versions = new ArrayList<>();
+                    map(s3ObjectSummary -> {
+                        List<Grant> grants = getListAmazonObjectGrants(s3ObjectSummary.getKey());
+                        List<S3VersionSummary> versions = getListAmazonObjectVersions(s3ObjectSummary.getKey());
 
-                        loopFilesList.add(S3ObjectSummary.getKey());
+                        loopFilesList.add(s3ObjectSummary.getKey());
 
-                        return convertS3ObjectSummary(S3ObjectSummary, grants, versions);
+                        return convertS3ObjectSummary(s3ObjectSummary, grants, versions);
                     }).
                     collect(Collectors.toCollection(() -> resultList));
 
@@ -110,9 +107,8 @@ public class AmazonService implements IAmazonService {
             this.loopListObjectsV2Request.setContinuationToken(token);
 
             logger.info("Download S3ObjectSummary from Amazon");
-            logger.info("resultList: "+resultList.size());
         } catch (AmazonServiceException e) {
-            logger.error(e.getErrorCode()+" : "+e.getErrorMessage());
+            logger.error(e.getErrorMessage());
         } catch (SdkClientException e) {
             logger.error(e.getMessage());
         }
@@ -127,14 +123,12 @@ public class AmazonService implements IAmazonService {
         List<S3VersionSummary> resultList = new ArrayList<>();
 
         try {
-            AmazonS3 s3Client = gets3Client();
-
             ListVersionsRequest req = new ListVersionsRequest().
                     withBucketName(bucketName).
                     withMaxResults(MAX_DOWNLOAD_CNT_VERSION).
                     withPrefix(fileName);
 
-            VersionListing result = s3Client.listVersions(req);
+            VersionListing result = s3Client().listVersions(req);
 
             while (true) {
                 result.getVersionSummaries().
@@ -142,16 +136,15 @@ public class AmazonService implements IAmazonService {
                         collect(Collectors.toCollection(() -> resultList));
 
                 if (result.isTruncated()) {
-                    result = s3Client.listNextBatchOfVersions(result);
+                    result = s3Client().listNextBatchOfVersions(result);
                 } else {
                     break;
                 }
             }
 
-            logger.info("Download S3ObjectSummary from Amazon");
-            logger.info("resultList: "+resultList.size());
+            logger.info(String.format("Download S3ObjectSummary from Amazon: %s", resultList.size()));
         } catch (AmazonServiceException e) {
-            logger.error(e.getErrorCode()+" : "+e.getErrorMessage());
+            logger.error(e.getErrorMessage());
         } catch (SdkClientException e) {
             logger.error(e.getMessage());
         }
@@ -166,13 +159,8 @@ public class AmazonService implements IAmazonService {
         List<Grant> grants = new ArrayList<>();
 
         try {
-            AmazonS3 s3Client = gets3Client();
-
-            AccessControlList acl = s3Client.getObjectAcl(bucketName, fileName);
+            AccessControlList acl = s3Client().getObjectAcl(bucketName, fileName);
             grants = acl.getGrantsAsList();
-            for (Grant grant : grants) {
-                System.out.format("  %s: %s\n", grant.getGrantee().getIdentifier(), grant.getPermission().toString());
-            }
         } catch (AmazonServiceException e) {
             logger.error(e.getErrorMessage());
         }
@@ -224,7 +212,7 @@ public class AmazonService implements IAmazonService {
         if (!grants.isEmpty()) {
             grants.
                     stream().
-                    map((grant)->{
+                    map(grant->{
                         return convertS3ObjectGrant(grant);
                     }).
                     collect(Collectors.toCollection(() -> result));
@@ -254,7 +242,7 @@ public class AmazonService implements IAmazonService {
         if (!s3VersionSummaryList.isEmpty()) {
             s3VersionSummaryList.
                     stream().
-                    map((s3VersionSummary)->{
+                    map(s3VersionSummary->{
                         return convertS3ObjectVersion(s3VersionSummary);
                     }).
                     collect(Collectors.toCollection(() -> result));

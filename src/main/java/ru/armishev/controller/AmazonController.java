@@ -9,18 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.HtmlUtils;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
 
 import javax.validation.constraints.Min;
-import java.util.List;
 
 @Controller
 @RequestMapping(value="/list")
 public class AmazonController {
     private final AmazonObjectJPA amazonObjectJPA;
-    private static final int countObjOnPage = 10;
+    private static final int COUNT_OBJ_ON_PAGE = 10;
 
     @Autowired
     public AmazonController(AmazonObjectJPA amazonObjectJPA) {
@@ -29,7 +27,7 @@ public class AmazonController {
 
     @GetMapping("")
     public String getList(Model model, @RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int currentPage) {
-        Pageable firstPageWithTwoElements = PageRequest.of(currentPage, countObjOnPage);
+        Pageable firstPageWithTwoElements = PageRequest.of(currentPage, COUNT_OBJ_ON_PAGE);
         Page<AmazonObjectEntity> page = amazonObjectJPA.findAll(firstPageWithTwoElements);
 
         model.addAttribute("listS3", page.getContent());
