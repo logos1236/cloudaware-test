@@ -71,8 +71,8 @@
                     <div class="s3_list_elem_property_value">
                         <span th:if="${s3obj.getVersions().empty}">Empty</span>
                         <div class="property_elem" th:each="version : ${s3obj.getVersions()}">
-                            <span th:if="${version.getVersionPK() != null}"><b>Version:</b> <span th:text="${version.getVersionPK().getVersion()}"></span></span><br/>
-                            <span th:if="${version.getOwner() != null}"><b>Owner:</b> <span th:text="${version.getOwner().getKey()}"></span></span><br/>
+                            <span th:if="${version.getVersionPK() != null}"><b>Version:</b> <span th:text="${version.getVersionPK().getVersion()}"></span><br/></span>
+                            <span th:if="${version.getOwner() != null}"><b>Owner:</b> <span th:text="${version.getOwner().getKey()}"></span><br/></span>
                             <b>Latest:</b> <span th:text="${version.isLatest()}"></span><br/>
                             <b>Deleted:</b> <span th:text="${version.isDeleted()}"></span>
                         </div>
