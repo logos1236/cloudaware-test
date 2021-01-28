@@ -1,22 +1,20 @@
 package ru.armishev.entity;
 
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name="AmazonObject")
+@Table(name="amazon_objects")
 public class AmazonObjectEntity {
     @Id
-    @Column(name="key", unique = true)
+    @Column(name="key", nullable = false, unique = true)
     private String key;
 
     @Column(name="lastModified")
@@ -30,13 +28,23 @@ public class AmazonObjectEntity {
     @Min(1)
     private Long size;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "owner", referencedColumnName = "id", insertable = true, updatable = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private AmazonObjectOwnerEntity owner;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name="owner", insertable = true, updatable = true)
+    //@OnDelete(action = OnDeleteAction.CASCADE)
+    private OwnerEntity ownerEntity;
 
     @Column(name = "storageClass")
     private String storageClass;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade={CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name="grants", insertable = true, updatable = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<GrantEntity> grants;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name="versions", insertable = true, updatable = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<VersionEntity> versionEntities;
 
     public String getKey() {
         return key;
@@ -70,12 +78,12 @@ public class AmazonObjectEntity {
         this.size = size;
     }
 
-    public AmazonObjectOwnerEntity getOwner() {
-        return owner;
+    public OwnerEntity getOwner() {
+        return ownerEntity;
     }
 
-    public void setOwner(AmazonObjectOwnerEntity owner) {
-        this.owner = owner;
+    public void setOwner(OwnerEntity ownerEntity) {
+        this.ownerEntity = ownerEntity;
     }
 
     public String getStorageClass() {
@@ -84,6 +92,22 @@ public class AmazonObjectEntity {
 
     public void setStorageClass(String storageClass) {
         this.storageClass = storageClass;
+    }
+
+    public List<GrantEntity> getGrants() {
+        return grants;
+    }
+
+    public void setGrants(List<GrantEntity> grants) {
+        this.grants = grants;
+    }
+
+    public List<VersionEntity> getVersions() {
+        return versionEntities;
+    }
+
+    public void setVersions(List<VersionEntity> versionEntities) {
+        this.versionEntities = versionEntities;
     }
 
     @Override

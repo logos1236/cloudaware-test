@@ -6,6 +6,10 @@
     <section id="main_section">
         <h1>Список объектов</h1>
 
+        <div class="total-count-block">
+            Общее количество объектов: <span th:text="${totalCountElements}"></span>
+        </div>
+
         <section class="s3_list">
             <table>
                 <thead>
@@ -25,8 +29,8 @@
                     <td class="td_eTag"><span th:text="${s3obj.getETag()}"> eTag </span></td>
                     <td class="td_size"><span th:text="${s3obj.getSize()}"> size </span></td>
                     <td class="td_owner">
-                        <b>id: <span th:text="${s3obj.getOwner().getId()}"> owner id</span></b><br>
-                        <span>name: <span th:text="${s3obj.getOwner().getDisplayName()}"> owner display name</span></span>
+                        <b>id: <span th:text="${s3obj.getOwner().getId()}"> ownerEntity id</span></b><br>
+                        <span>name: <span th:text="${s3obj.getOwner().getDisplayName()}"> ownerEntity display name</span></span>
                     </td>
                     <td class="td_storage_class"><span th:text="${s3obj.getStorageClass()}"> storageClass </span></td>
                 </tr>
@@ -38,7 +42,7 @@
             </div>
 
             <div class="pagination-block" th:if="${totalPages > 0 && !listS3.empty}">
-                <form class="ru.armishev.service-pagination-form" action="" method="GET" autocomplete="off">
+                <form class="service-pagination-form" action="" method="GET" autocomplete="off">
                     <label>
                         <span>Страница:</span>
                         <select name="page">

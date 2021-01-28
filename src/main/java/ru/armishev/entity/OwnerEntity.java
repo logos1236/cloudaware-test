@@ -1,28 +1,24 @@
 package ru.armishev.entity;
 
-import com.amazonaws.services.s3.model.Owner;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name="AmazonObjectOwner")
-public class AmazonObjectOwnerEntity {
+@Table(name="owners")
+public class OwnerEntity {
     @Id
-    @Column(name="id", unique = true)
-    private String id;
+    @Column(name="key", nullable = false, unique = true)
+    private String key;
 
     @Column(name="displayName")
     private String displayName;
 
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getDisplayName() {
@@ -37,12 +33,12 @@ public class AmazonObjectOwnerEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AmazonObjectOwnerEntity that = (AmazonObjectOwnerEntity) o;
-        return id.equals(that.id);
+        OwnerEntity that = (OwnerEntity) o;
+        return key.equals(that.key);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(key);
     }
 }

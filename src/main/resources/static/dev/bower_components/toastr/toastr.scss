@@ -36,9 +36,9 @@
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
   filter: alpha(opacity=40);
 }
-/*Additional properties for button version
+/*Additional properties for button versionEntity
  iOS requires the button element instead of an anchor tag.
- If you want the anchor version, it requires `href="#"`.*/
+ If you want the anchor versionEntity, it requires `href="#"`.*/
 button.toast-close-button {
   padding: 0;
   cursor: pointer;

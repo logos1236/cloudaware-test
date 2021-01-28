@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
-import ru.armishev.service.IAmazonEntity;
 
 import java.util.*;
 

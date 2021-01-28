@@ -183,7 +183,7 @@ toastr.options.rtl = true;
 
 ## Building Toastr
 
-To build the minified and css versions of Toastr you will need [node](http://nodejs.org) installed. (Use Homebrew or Chocolatey.)
+To build the minified and css versionEntities of Toastr you will need [node](http://nodejs.org) installed. (Use Homebrew or Chocolatey.)
 
 ```
 npm install -g gulp karma-cli

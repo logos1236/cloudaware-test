@@ -5,6 +5,6 @@ import ru.armishev.entity.AmazonObjectEntity;
 
 import java.util.List;
 
-public interface IAmazonEntity {
+public interface IAmazonEntitySync {
     void updateList();
 }

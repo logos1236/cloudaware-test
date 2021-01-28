@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.armishev.cron.AmazonDownloadScheduler;
 import ru.armishev.entity.AmazonObjectEntity;
-import ru.armishev.entity.AmazonObjectOwnerEntity;
+import ru.armishev.entity.OwnerEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
 
 import java.sql.Date;
@@ -13,44 +13,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AmazonEntityTestMock implements IAmazonEntity {
+public class AmazonEntitySyncTestMock implements IAmazonEntitySync {
     private final AmazonObjectJPA amazonObjectJPA;
     private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
     private static final long cm = System.currentTimeMillis();
     private static boolean isAlreadyAdd = false;
 
-    private static AmazonObjectOwnerEntity amazonObjectOwnerEntity = new AmazonObjectOwnerEntity();
+    private static OwnerEntity ownerEntity = new OwnerEntity();
     private static AmazonObjectEntity amazonObjectEntity1 = new AmazonObjectEntity();
     private static AmazonObjectEntity amazonObjectEntity2 = new AmazonObjectEntity();
     private static AmazonObjectEntity amazonObjectEntity3 = new AmazonObjectEntity();
     {
-        amazonObjectOwnerEntity.setId("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
-        amazonObjectOwnerEntity.setDisplayName("malammik");
+        ownerEntity.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
+        ownerEntity.setDisplayName("malammik");
 
         amazonObjectEntity1.setKey("file_2015-08-06.txt");
         amazonObjectEntity1.setLastModified(new Date(System.currentTimeMillis()));
         amazonObjectEntity1.setETag("&quot;090228db8da1203d89d73341c95932b4&quot;");
         amazonObjectEntity1.setSize(12L);
         amazonObjectEntity1.setStorageClass("STANDARD");
-        amazonObjectEntity1.setOwner(amazonObjectOwnerEntity);
+        amazonObjectEntity1.setOwner(ownerEntity);
 
         amazonObjectEntity2.setKey("2");
         amazonObjectEntity2.setLastModified(new Date(cm));
         amazonObjectEntity2.setETag("ETag");
         amazonObjectEntity2.setSize(12L);
         amazonObjectEntity2.setStorageClass("Test Static");
-        amazonObjectEntity2.setOwner(amazonObjectOwnerEntity);
+        amazonObjectEntity2.setOwner(ownerEntity);
 
         amazonObjectEntity3.setKey("3");
         amazonObjectEntity3.setLastModified(new Date(cm));
         amazonObjectEntity3.setETag("ETag");
         amazonObjectEntity3.setSize(12L);
         amazonObjectEntity3.setStorageClass("Test Static");
-        amazonObjectEntity3.setOwner(amazonObjectOwnerEntity);
+        amazonObjectEntity3.setOwner(ownerEntity);
     }
 
     @Autowired
-    public AmazonEntityTestMock(AmazonObjectJPA amazonObjectJPA) {
+    public AmazonEntitySyncTestMock(AmazonObjectJPA amazonObjectJPA) {
         this.amazonObjectJPA = amazonObjectJPA;
     }
 

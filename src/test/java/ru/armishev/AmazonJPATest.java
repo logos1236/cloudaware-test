@@ -1,19 +1,15 @@
 package ru.armishev;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.armishev.entity.AmazonObjectEntity;
 import ru.armishev.jpa.AmazonObjectJPA;
-import ru.armishev.service.AmazonEntityTestMock;
+import ru.armishev.service.AmazonEntitySyncTestMock;
 
 import java.util.*;
 
@@ -21,7 +17,7 @@ import java.util.*;
 @DataJpaTest
 public class AmazonJPATest {
     private final AmazonObjectJPA amazonObjectJPA;
-    private final AmazonEntityTestMock amazonEntity;
+    private final AmazonEntitySyncTestMock amazonEntity;
 
     @BeforeAll
     public void clearDatabase() {
@@ -31,7 +27,7 @@ public class AmazonJPATest {
     @Autowired
     public AmazonJPATest(AmazonObjectJPA amazonObjectJPA) {
         this.amazonObjectJPA = amazonObjectJPA;
-        this.amazonEntity = new AmazonEntityTestMock(amazonObjectJPA);
+        this.amazonEntity = new AmazonEntitySyncTestMock(amazonObjectJPA);
     }
 
     @Test

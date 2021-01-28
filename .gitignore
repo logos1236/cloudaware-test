@@ -40,3 +40,5 @@ build/
 ### Download directory ###
 /src/main/resources/log
 /src/test/resources/log
+
+Test.java

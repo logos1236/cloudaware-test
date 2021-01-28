@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(value="/list")
 public class AmazonController {
     private final AmazonObjectJPA amazonObjectJPA;
-    private static final int countObjOnPage = 1;
+    private static final int countObjOnPage = 10;
 
     @Autowired
     public AmazonController(AmazonObjectJPA amazonObjectJPA) {
@@ -34,6 +34,7 @@ public class AmazonController {
         model.addAttribute("listS3", page.getContent());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalCountElements", page.getTotalElements());
 
         return "list";
     }

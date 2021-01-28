@@ -100,6 +100,15 @@ table {
     width:10%;
 }
 
+.total-count-block {
+    margin:20px 0px;
+    text-align:right;
+}
+
+.total-count-block span {
+    font-weight:bold;
+}
+
 .btn {
 	box-shadow:inset 0px 1px 0px 0px #54a3f7;
 	background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
