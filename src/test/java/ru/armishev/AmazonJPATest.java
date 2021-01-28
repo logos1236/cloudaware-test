@@ -1,6 +1,7 @@
 package ru.armishev;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ public class AmazonJPATest {
     private final AmazonObjectJPA amazonObjectJPA;
     private final AmazonEntitySyncTestMock amazonEntity;
 
-    @BeforeAll
+    @Before
     public void clearDatabase() {
         amazonObjectJPA.deleteAll();
     }

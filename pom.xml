@@ -1,35 +1,21 @@
-<?xml versionEntity="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<versionEntity>2.4.2</versionEntity>
+		<version>2.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
-	<versionEntity>0.0.1-SNAPSHOT</versionEntity>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>CloudAware</name>
+	<description>Project for Spring Boot</description>
 	<properties>
-		<!--<java.versionEntity>11</java.versionEntity>-->
 		<java.versionEntity>1.8</java.versionEntity>
 	</properties>
-
-<!-- Amazon -->
-	<!--<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>software.amazon.awssdk</groupId>
-				<artifactId>bom</artifactId>
-				<versionEntity>2.10.54</versionEntity>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>-->
 
 	<dependencies>
 		<dependency>
@@ -61,7 +47,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<versionEntity>6.0.13.Final</versionEntity>
+			<version>6.0.13.Final</version>
 		</dependency>
 
 		<!-- Amazon -->
@@ -69,7 +55,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
-			<versionEntity>1.11.942</versionEntity>
+			<version>1.11.942</version>
 		</dependency>
 
 		<!-- Test -->
@@ -83,31 +69,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!--<dependency>
-			<groupId>software.amazon.awssdk</groupId>
-			<artifactId>dynamodb-enhanced</artifactId>
-			<versionEntity>2.11.0-PREVIEW</versionEntity>
-		</dependency>
-		<dependency>
-			<groupId>software.amazon.awssdk</groupId>
-			<artifactId>dynamodb</artifactId>
-			<versionEntity>2.5.10</versionEntity>
-		</dependency>
-		<dependency>
-			<groupId>software.amazon.awssdk</groupId>
-			<artifactId>sns</artifactId>
-		</dependency>-->
 	</dependencies>
-
-	<!--<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>-->
 
 	<build>
 		<plugins>

@@ -3,6 +3,7 @@ package ru.armishev.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.armishev.cron.AmazonDownloadScheduler;
 import ru.armishev.entity.*;
@@ -83,29 +84,31 @@ public class AmazonEntitySyncMock implements IAmazonEntitySync {
     private List<AmazonObjectEntity> getListFromAmazon() {
         List<AmazonObjectEntity> result = new ArrayList<>();
 
+        OwnerEntity ownerEntity = new OwnerEntity();
+        ownerEntity.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
+        ownerEntity.setDisplayName("malammik");
+
         VersionEntity.VersionPK versionPK = new VersionEntity.VersionPK();
         versionPK.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
         versionPK.setVersion("Test Version");
         VersionEntity versionEntity = new VersionEntity();
         versionEntity.setVersionPK(versionPK);
+        versionEntity.setOwner(ownerEntity);
 
         VersionEntity.VersionPK versionPK1 = new VersionEntity.VersionPK();
         versionPK1.setKey("test");
         versionPK1.setVersion("Test Version 2");
         VersionEntity versionEntity1 = new VersionEntity();
         versionEntity1.setVersionPK(versionPK1);
+        versionEntity1.setOwner(ownerEntity);
 
         GrantEntity grantEntity = new GrantEntity();
         grantEntity.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
-        grantEntity.setName("FULL_CONTROL");
+        grantEntity.setPermission("FULL_CONTROL");
 
         GrantEntity grantEntity1 = new GrantEntity();
         grantEntity1.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
-        grantEntity1.setName("FULL_CONTROL");
-
-        OwnerEntity ownerEntity = new OwnerEntity();
-        ownerEntity.setKey("14fbada9d6aac53a2d851e6c777ffea7cd9ac4d213bee68af9f5d9b247c20c04");
-        ownerEntity.setDisplayName("malammik");
+        grantEntity1.setPermission("FULL_CONTROL");
 
         //
         AmazonObjectEntity newAmazonObjectEntity = new AmazonObjectEntity();

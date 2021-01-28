@@ -2,6 +2,7 @@ package ru.armishev.entity;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -64,6 +65,10 @@ public class AmazonObjectEntity {
 
     public String getETag() {
         return ETag;
+    }
+
+    public String getETagUnescape() {
+        return HtmlUtils.htmlUnescape(ETag);
     }
 
     public void setETag(String ETag) {

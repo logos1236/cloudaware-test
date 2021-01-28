@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface IAmazonService {
     public List<AmazonObjectEntity> getListAmazonObjectEntity();
+    public boolean isLoopEnd();
 }

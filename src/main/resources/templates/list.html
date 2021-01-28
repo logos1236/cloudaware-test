@@ -11,34 +11,77 @@
         </div>
 
         <section class="s3_list">
-            <table>
-                <thead>
-                <tr>
-                    <th class="td_key">Key</th>
-                    <th class="td_last_modified">Last Modified</th>
-                    <th class="td_eTag">eTag</th>
-                    <th class="td_size">Size</th>
-                    <th class="td_owner">Owner</th>
-                    <th class="td_storage_class">Storage Class</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="s3obj : ${listS3}">
-                    <td class="td_key"><span th:text="${s3obj.getKey()}"> key </span></td>
-                    <td class="td_last_modified"><span th:text="${s3obj.getLastModified()}"> lastModified </span></td>
-                    <td class="td_eTag"><span th:text="${s3obj.getETag()}"> eTag </span></td>
-                    <td class="td_size"><span th:text="${s3obj.getSize()}"> size </span></td>
-                    <td class="td_owner">
-                        <b>id: <span th:text="${s3obj.getOwner().getId()}"> ownerEntity id</span></b><br>
-                        <span>name: <span th:text="${s3obj.getOwner().getDisplayName()}"> ownerEntity display name</span></span>
-                    </td>
-                    <td class="td_storage_class"><span th:text="${s3obj.getStorageClass()}"> storageClass </span></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="s3_list_elem" th:each="s3obj : ${listS3}">
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Key:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:text="${s3obj.getKey()}"> key </span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Last Modified:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:text="${s3obj.getLastModified()}"> lastModified </span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">eTag:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:text="${s3obj.getETagUnescape()}"> eTag </span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Size:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:text="${s3obj.getSize()}"> size </span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Owner:</div>
+                    <div class="s3_list_elem_property_value">
+                        <b>Id:</b> <span th:text="${s3obj.getOwner().getKey()}"> ownerEntity id</span><br>
+                        <b>Name:</b> <span th:text="${s3obj.getOwner().getDisplayName()}"> ownerEntity display name</span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Storage class:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:text="${s3obj.getStorageClass()}"> storageClass </span>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Grant:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:if="${s3obj.getGrants().empty}">Empty</span>
+                        <div class="property_elem" th:each="grant : ${s3obj.getGrants()}">
+                            <b>Key:</b> <span th:text="${grant.getKey()}"></span><br/>
+                            <b>Permission:</b> <span th:text="${grant.getPermission()}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s3_list_elem_property">
+                    <div class="s3_list_elem_property_name">Version:</div>
+                    <div class="s3_list_elem_property_value">
+                        <span th:if="${s3obj.getVersions().empty}">Empty</span>
+                        <div class="property_elem" th:each="version : ${s3obj.getVersions()}">
+                            <b>Version:</b> <span th:text="${version.getVersionPK().getVersion()}"></span><br/>
+                            <b>Owner:</b> <span th:text="${version.getOwner().getKey()}"></span><br/>
+                            <b>Latest:</b> <span th:text="${version.isLatest()}"></span><br/>
+                            <b>Deleted:</b> <span th:text="${version.isDeleted()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="empty" th:if="${listS3.empty}">
-                <td colspan="2"> No s3 objects Available </td>
+                No s3 objects Available
             </div>
 
             <div class="pagination-block" th:if="${totalPages > 0 && !listS3.empty}">

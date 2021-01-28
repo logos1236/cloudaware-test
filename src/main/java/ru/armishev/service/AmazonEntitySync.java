@@ -32,68 +32,46 @@ public class AmazonEntitySync implements IAmazonEntitySync {
     @Override
     public void updateList() {
         List<AmazonObjectEntity> rawList = amazonService.getListAmazonObjectEntity();
-        List<AmazonObjectEntity> currentDatabaseList = amazonObjectJPA.findAll();
+        addOrUpdateObjectInDB(rawList);
 
-        addOrUpdateObjectInDB(rawList, currentDatabaseList);
-        deleteNotExistedObjectInDatabase(rawList, currentDatabaseList);
+        /*
+            Если цикл загрузки всех файлов завершился, то находим разницу между
+            файлами, загруженными в данном цикле и уже присутствующими в базе
+            Если в базе есть файлы, не присутствующие в данном цикле загрузки - удаляем их
+         */
+        if (amazonService.isLoopEnd()) {
+            System.out.println("End cycle");
+            List<AmazonObjectEntity> currentDatabaseList = amazonObjectJPA.findAll();
+            deleteNotExistedObjectInDatabase(amazonService.getLoopFilesList(), currentDatabaseList);
+        }
     }
 
     /*
     Обновляем в локальной БД информацию о файлах в Amazon
     */
-    private void addOrUpdateObjectInDB(List<AmazonObjectEntity> rawList, List<AmazonObjectEntity> currentDatabaseList) {
-        List<AmazonObjectEntity> listForAddOrUpdate = new ArrayList<>();
-
-        if (rawList.isEmpty()) {
-            return;
-        }
-
-        if (!currentDatabaseList.isEmpty()) {
-            listForAddOrUpdate = rawList.
-                    stream().
-                    filter(rawObject -> {
-                        boolean needAddObj = false;
-                        int indexOfDatabaseObj = currentDatabaseList.indexOf(rawObject);
-
-                        if (indexOfDatabaseObj < 0) {
-                            needAddObj = true;
-                        } else {
-                            AmazonObjectEntity currentDatabaseObject = currentDatabaseList.get(indexOfDatabaseObj);
-                            if (currentDatabaseObject.getLastModified().compareTo(rawObject.getLastModified()) != 0) {
-                                needAddObj = true;
-                            }
-                        }
-
-                        return needAddObj;
-                    }).
-                    collect(Collectors.toList());
-        } else {
-            listForAddOrUpdate = rawList;
-        }
-
-        if (!listForAddOrUpdate.isEmpty()) {
-            amazonObjectJPA.saveAll(listForAddOrUpdate);
+    private void addOrUpdateObjectInDB(List<AmazonObjectEntity> rawList) {
+        if (!rawList.isEmpty()) {
+            amazonObjectJPA.saveAll(rawList);
 
             logger.info("rawList: "+rawList.size());
-            logger.info("currentDatabaseList: "+currentDatabaseList.size());
-            logger.info("Save new objects to database: "+listForAddOrUpdate.size());
+            logger.info("Save new objects to database: "+rawList.size());
         }
     }
 
     /*
     Удаляем из локальной БД информацию о файлах, которых больше нет в Amazon
     */
-    private void deleteNotExistedObjectInDatabase(List<AmazonObjectEntity> rawList, List<AmazonObjectEntity> currentDatabaseList) {
+    private void deleteNotExistedObjectInDatabase(List<String> loopFilesList, List<AmazonObjectEntity> currentDatabaseList) {
         List<AmazonObjectEntity> listForDelete = new ArrayList<>();
 
         if (currentDatabaseList.isEmpty()) {
             return;
         }
 
-        if (!rawList.isEmpty()) {
+        if (!loopFilesList.isEmpty()) {
             listForDelete = currentDatabaseList.stream()
                     .filter(aObject -> {
-                        return !rawList.contains(aObject);
+                        return !loopFilesList.contains(aObject.getKey());
                     })
                     .collect(Collectors.toList());
         } else {

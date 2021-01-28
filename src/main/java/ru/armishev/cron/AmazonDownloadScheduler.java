@@ -9,17 +9,17 @@ import ru.armishev.service.IAmazonEntitySync;
 
 @Component
 public class AmazonDownloadScheduler {
-    private final IAmazonEntitySync amazonEntity;
+    private final IAmazonEntitySync amazonEntitySync;
 
     private final Logger logger = LoggerFactory.getLogger(AmazonDownloadScheduler.class);
 
     @Autowired
-    public AmazonDownloadScheduler(IAmazonEntitySync amazonEntity) {
-        this.amazonEntity = amazonEntity;
+    public AmazonDownloadScheduler(IAmazonEntitySync amazonEntitySync) {
+        this.amazonEntitySync = amazonEntitySync;
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 6000)
     public void myScheduler() {
-        amazonEntity.updateList();
+        amazonEntitySync.updateList();
     }
 }

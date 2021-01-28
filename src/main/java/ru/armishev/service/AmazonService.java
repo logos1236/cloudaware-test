@@ -22,8 +22,13 @@ import java.util.stream.Collectors;
 public class AmazonService implements IAmazonService {
     private final Regions clientRegion;
     private final String bucketName;
-    private final static int MAX_DOWNLOAD_CNT = 1;
+    private final static int MAX_DOWNLOAD_CNT = 1000;
     private final static int MAX_DOWNLOAD_CNT_VERSION = 1;
+
+    private AmazonS3 s3Client;
+    private ListObjectsV2Result loopListObjectsV2Result;
+    private ListObjectsV2Request loopListObjectsV2Request;
+    private List<String> loopFilesList = new ArrayList<>();
 
     private final Logger logger = LoggerFactory.getLogger(AmazonService.class);
 
@@ -32,69 +37,97 @@ public class AmazonService implements IAmazonService {
         this.clientRegion = Regions.fromName(clientRegion);
     }
 
-    @Override
-    public List<AmazonObjectEntity> getListAmazonObjectEntity() {
-        List<AmazonObjectEntity> resultList = new ArrayList<>();
-        AmazonS3 s3Client;
-        ListObjectsV2Request req;
-        ListObjectsV2Result result;
-
-        try {
-            s3Client = AmazonS3ClientBuilder.standard()
+    private AmazonS3 gets3Client() {
+        if (this.s3Client == null) {
+            this.s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
                     .build();
 
             if (!s3Client.doesBucketExistV2(bucketName)) {
                 logger.error("Bucket doesn't exist");
-                throw new RuntimeException("Bucket doesn't exist");
+                throw new AmazonServiceException("Bucket doesn't exist");
             }
+        }
 
-            req = new ListObjectsV2Request().withBucketName(bucketName).withMaxKeys(MAX_DOWNLOAD_CNT);
-            req.setFetchOwner(true);
-            //do {
-                result = s3Client.listObjectsV2(req);
-                result.getObjectSummaries().
-                        stream().
-                        map((S3ObjectSummary)->{
-                            List<Grant> grants = getListAmazonObjectGrants(S3ObjectSummary.getKey());
-                            List<S3VersionSummary> versions = getListAmazonObjectVersions(S3ObjectSummary.getKey());
+        return this.s3Client;
+    }
 
-                            return convertS3ObjectSummary(S3ObjectSummary, grants, versions);
-                        }).
-                        collect(Collectors.toCollection(() -> resultList));
+    public boolean isLoopEnd() {
+        boolean result = false;
 
-                String token = result.getNextContinuationToken();
-                req.setContinuationToken(token);
-            //} while (result.isTruncated());
+        if (loopListObjectsV2Result != null && !loopListObjectsV2Result.isTruncated()) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    public List<String> getLoopFilesList() {
+        return loopFilesList;
+    }
+
+    /*
+        Зацикливаем запрос спсика объектов из Amazon
+        */
+    private void initLoopListObjectsV2Result() {
+        AmazonS3 s3Client = gets3Client();
+
+        if (this.loopListObjectsV2Request == null || !loopListObjectsV2Result.isTruncated()) {
+            this.loopListObjectsV2Request = new ListObjectsV2Request().withBucketName(bucketName).withMaxKeys(MAX_DOWNLOAD_CNT);
+            this.loopListObjectsV2Request.setFetchOwner(true);
+
+            loopFilesList = new ArrayList<>();
+        }
+
+        loopListObjectsV2Result = s3Client.listObjectsV2(this.loopListObjectsV2Request);
+    }
+
+    /*
+    Список файлов
+    */
+    @Override
+    public List<AmazonObjectEntity> getListAmazonObjectEntity() {
+        List<AmazonObjectEntity> resultList = new ArrayList<>();
+
+        try {
+            initLoopListObjectsV2Result();
+
+            this.loopListObjectsV2Result.getObjectSummaries().
+                    stream().
+                    map((S3ObjectSummary) -> {
+                        //List<Grant> grants = getListAmazonObjectGrants(S3ObjectSummary.getKey());
+                        //List<S3VersionSummary> versions = getListAmazonObjectVersions(S3ObjectSummary.getKey());
+                        List<Grant> grants = new ArrayList<>();
+                        List<S3VersionSummary> versions = new ArrayList<>();
+
+                        loopFilesList.add(S3ObjectSummary.getKey());
+
+                        return convertS3ObjectSummary(S3ObjectSummary, grants, versions);
+                    }).
+                    collect(Collectors.toCollection(() -> resultList));
+
+            String token = this.loopListObjectsV2Result.getNextContinuationToken();
+            this.loopListObjectsV2Request.setContinuationToken(token);
 
             logger.info("Download S3ObjectSummary from Amazon");
             logger.info("resultList: "+resultList.size());
         } catch (AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process
-            // it, so it returned an error response.
             logger.error(e.getErrorCode()+" : "+e.getErrorMessage());
         } catch (SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
             logger.error(e.getMessage());
         }
 
         return resultList;
     }
 
+    /*
+    Список версий файла
+    */
     private List<S3VersionSummary> getListAmazonObjectVersions(String fileName) {
         List<S3VersionSummary> resultList = new ArrayList<>();
-        AmazonS3 s3Client;
 
         try {
-            s3Client = AmazonS3ClientBuilder.standard()
-                    .withRegion(clientRegion)
-                    .build();
-
-            if (!s3Client.doesBucketExistV2(bucketName)) {
-                logger.error("Bucket doesn't exist");
-                throw new RuntimeException("Bucket doesn't exist");
-            }
+            AmazonS3 s3Client = gets3Client();
 
             ListVersionsRequest req = new ListVersionsRequest().
                     withBucketName(bucketName).
@@ -126,14 +159,14 @@ public class AmazonService implements IAmazonService {
         return resultList;
     }
 
+    /*
+    Список прав доступа файла
+    */
     private List<Grant> getListAmazonObjectGrants(String fileName) {
-        AmazonS3 s3Client;
         List<Grant> grants = new ArrayList<>();
 
         try {
-            s3Client = AmazonS3ClientBuilder.standard()
-                    .withRegion(clientRegion)
-                    .build();
+            AmazonS3 s3Client = gets3Client();
 
             AccessControlList acl = s3Client.getObjectAcl(bucketName, fileName);
             grants = acl.getGrantsAsList();
@@ -201,9 +234,13 @@ public class AmazonService implements IAmazonService {
     }
 
     private static GrantEntity convertS3ObjectGrant(Grant grant) {
-        GrantEntity grantEntity = new GrantEntity();
-        grantEntity.setKey(grant.getGrantee().getIdentifier());
-        grantEntity.setName(grant.getPermission().toString());
+        GrantEntity grantEntity = null;
+
+        if (grant != null) {
+            grantEntity = new GrantEntity();
+            grantEntity.setKey(grant.getGrantee().getIdentifier());
+            grantEntity.setPermission(grant.getPermission().toString());
+        }
 
         return grantEntity;
     }

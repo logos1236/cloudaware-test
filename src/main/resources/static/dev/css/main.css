@@ -20,7 +20,7 @@ h2 {
     background:#fff;
     min-width: 640px;
     width: 70%;
-    max-width: 1260px;
+    max-width: 960px;
     margin:0px auto;
     min-height: 100%;
     padding:40px 35px;
@@ -46,67 +46,62 @@ table {
     -webkit-border-vertical-spacing: 0;
 }
 
-.s3_list table {
-    width:100%;
-}
 
 .pagination-block {
+    text-align:center;
     margin: 20px 0px;
-}
-
-.s3_list .empty {
-    margin: 20px 0px;
-    font-size: 18px;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
-}
-
-.s3_list th, .s3_list td {
-    border: 1px solid #000;
-    padding: 5px;
-}
-
-.s3_list th {
-    text-align:center;
-    font-weight:bold;
-}
-
-.s3_list .td_key {
-    width:15%;
-    text-align:center;
-}
-.s3_list .td_last_modified {
-    width:25%;
-    text-align:center;
-}
-.s3_list .td_eTag {
-    width:20%;
-}
-.s3_list .td_eTag span {
-    word-break: break-all;
-}
-.s3_list .td_size {
-    width:10%;
-    text-align:center;
-}
-.s3_list .td_owner {
-    width:30%;
-}
-.s3_list .td_owner span {
-    word-break: break-all;
-}
-.s3_list .td_storage_class {
-    width:10%;
 }
 
 .total-count-block {
-    margin:20px 0px;
+    margin: 20px 0px;
     text-align:right;
 }
 
 .total-count-block span {
     font-weight:bold;
+}
+
+.s3_list .empty {
+    margin: 20px 0px;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.s3_list {
+    text-align:left;
+}
+
+.s3_list .s3_list_elem {
+    font-size:16px;
+    border:1px solid #000;
+    border-radius:10px;
+    margin:0px 0px 10px 0px;
+    margin:0px 0px 10px 0px;
+}
+
+.s3_list .s3_list_elem .s3_list_elem_property {
+    margin:0px 0px 15px 0px;
+}
+.s3_list .s3_list_elem .s3_list_elem_property:last-child {
+    margin:0px 0px 0px 0px;
+}
+
+.s3_list .s3_list_elem_property_name {
+    font-size:18px;
+    font-weight:bold;
+    margin:5px;
+}
+.s3_list .s3_list_elem .s3_list_elem_property_value {
+    margin:5px;
+}
+
+.s3_list .s3_list_elem .property_elem {
+    margin:0px 0px 5px 0px;
+}
+.s3_list .s3_list_elem .property_elem:last-child {
+    margin:0px 0px 0px 0px;
 }
 
 .btn {
