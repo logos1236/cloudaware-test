@@ -40,7 +40,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
             Если в базе есть файлы, не присутствующие в данном цикле загрузки - удаляем их
          */
         if (amazonService.isLoopEnd()) {
-            System.out.println("End cycle");
+            logger.info("End cycle");
             List<AmazonObjectEntity> currentDatabaseList = amazonObjectJPA.findAll();
             deleteNotExistedObjectInDatabase(amazonService.getLoopFilesList(), currentDatabaseList);
         }
@@ -53,7 +53,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
         if (!rawList.isEmpty()) {
             amazonObjectJPA.saveAll(rawList);
 
-            logger.info(String.format("Save new objects to database: %s", rawList.size()));
+            logger.info("Save new objects to database");
         }
     }
 
@@ -80,7 +80,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
         if (!listForDelete.isEmpty()) {
             amazonObjectJPA.deleteAll(listForDelete);
 
-            logger.info(String.format("Delete not existed in s3 objects from database: %s", listForDelete.size()));
+            logger.info("Delete not existed in s3 objects from database");
         }
     }
 }

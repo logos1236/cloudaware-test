@@ -99,6 +99,7 @@ public class AmazonService implements IAmazonService {
     @Override
     public List<AmazonObjectEntity> getListAmazonObjectEntity() {
         List<AmazonObjectEntity> resultList = new ArrayList<>();
+        logger.info("Start download S3ObjectSummary from Amazon");
 
         try {
             initLoopListObjectsV2Result();
@@ -117,8 +118,6 @@ public class AmazonService implements IAmazonService {
 
             String token = this.loopListObjectsV2Result.getNextContinuationToken();
             this.loopListObjectsV2Request.setContinuationToken(token);
-
-            logger.info("Download S3ObjectSummary from Amazon");
         } catch (AmazonServiceException e) {
             logger.error(e.getErrorMessage());
         } catch (SdkClientException e) {
@@ -133,6 +132,7 @@ public class AmazonService implements IAmazonService {
     */
     private List<S3VersionSummary> getListAmazonObjectVersions(String fileName) {
         List<S3VersionSummary> resultList = new ArrayList<>();
+        logger.info("Download version for file from Amazon");
 
         try {
             ListVersionsRequest req = new ListVersionsRequest().
@@ -153,8 +153,6 @@ public class AmazonService implements IAmazonService {
                     break;
                 }
             }
-
-            logger.info(String.format("Download S3ObjectSummary from Amazon: %s", resultList.size()));
         } catch (AmazonServiceException e) {
             logger.error(e.getErrorMessage());
         } catch (SdkClientException e) {
@@ -169,6 +167,7 @@ public class AmazonService implements IAmazonService {
     */
     private List<Grant> getListAmazonObjectGrants(String fileName) {
         List<Grant> grants = new ArrayList<>();
+        logger.info("Download Grants for file from Amazon");
 
         try {
             AccessControlList acl = s3Client().getObjectAcl(bucketName, fileName);
