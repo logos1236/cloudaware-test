@@ -18,7 +18,7 @@ import javax.validation.constraints.Min;
 @RequestMapping(value="/list")
 public class AmazonController {
     private final AmazonObjectJPA amazonObjectJPA;
-    private static final int COUNT_OBJ_ON_PAGE = 10;
+    private static final int COUNT_OBJ_ON_PAGE = 2;
 
     @Autowired
     public AmazonController(AmazonObjectJPA amazonObjectJPA) {

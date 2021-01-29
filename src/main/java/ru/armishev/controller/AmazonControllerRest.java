@@ -19,7 +19,7 @@ import java.util.*;
 @RequestMapping(value="/api/v1/list")
 public class AmazonControllerRest {
     private final AmazonObjectJPA amazonObjectJPA;
-    private static final int COUNT_OBJ_ON_PAGE = 10;
+    private static final int COUNT_OBJ_ON_PAGE = 2;
 
     @Autowired
     public AmazonControllerRest(AmazonObjectJPA amazonObjectJPA) {
