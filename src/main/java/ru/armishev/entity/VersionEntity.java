@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/*
+Версии файлов
+*/
 @Entity
 @Table(name="versions")
 public class VersionEntity implements Serializable {
@@ -67,6 +70,9 @@ public class VersionEntity implements Serializable {
         return Objects.hash(versionPK);
     }
 
+    /*
+    Составной уникальный ключ для версии: имя файла + ключ версии
+    */
     @Embeddable
     public static class VersionPK implements Serializable {
         private String key;

@@ -26,8 +26,11 @@ public class AmazonEntitySync implements IAmazonEntitySync {
         this.amazonObjectJPA = amazonObjectJPA;
     }
 
+    /*
+    Запуск синхронизации
+     */
     @Override
-    public void updateList() {
+    public void syncList() {
         List<AmazonObjectEntity> rawList = amazonService.getListAmazonObjectEntity();
         addOrUpdateObjectInDB(rawList);
 

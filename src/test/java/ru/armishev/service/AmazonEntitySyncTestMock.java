@@ -87,7 +87,7 @@ public class AmazonEntitySyncTestMock implements IAmazonEntitySync {
     }
 
     @Override
-    public void updateList() {
+    public void syncList() {
         List<AmazonObjectEntity> rawList = new ArrayList<>();
         rawList.add(amazonObjectEntity1);
         rawList.add(amazonObjectEntity2);

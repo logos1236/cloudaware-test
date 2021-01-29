@@ -5,6 +5,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.armishev.service.IAmazonEntitySync;
 
+/*
+Скачивание информации о файлах по рассписанию
+ */
 @Component
 public class AmazonDownloadScheduler {
     private final IAmazonEntitySync amazonEntitySync;
@@ -16,6 +19,6 @@ public class AmazonDownloadScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void myScheduler() {
-        amazonEntitySync.updateList();
+        amazonEntitySync.syncList();
     }
 }

@@ -3,6 +3,9 @@ package ru.armishev.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
+/*
+Уровни доступа к файлам
+ */
 @Entity
 @Table(name="grants")
 public class GrantEntity {

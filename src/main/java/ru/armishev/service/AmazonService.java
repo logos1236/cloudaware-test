@@ -18,6 +18,9 @@ import ru.armishev.entity.VersionEntity;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+Подключение к Amazon получение информации файлов
+*/
 @Service
 public class AmazonService implements IAmazonService {
     private static final int MAX_DOWNLOAD_CNT = 5;
@@ -38,6 +41,9 @@ public class AmazonService implements IAmazonService {
         this.clientRegion = Regions.fromName(clientRegion);
     }
 
+    /*
+    Создаем объект AmazonS3 объект и проверяем, существует ли корзина
+    */
     private AmazonS3 s3Client() {
         if (this.s3Client == null) {
             this.s3Client = AmazonS3ClientBuilder.standard()
@@ -53,6 +59,9 @@ public class AmazonService implements IAmazonService {
         return this.s3Client;
     }
 
+    /*
+    Цикл скачивания файлов закончен?
+    */
     public boolean isLoopEnd() {
         boolean result = false;
 
@@ -63,6 +72,9 @@ public class AmazonService implements IAmazonService {
         return result;
     }
 
+    /*
+    Список имен файлов в корзине, скачанных за один полный цикл
+    */
     public List<String> getLoopFilesList() {
         return loopFilesList;
     }
@@ -220,7 +232,6 @@ public class AmazonService implements IAmazonService {
 
         return result;
     }
-
     private static GrantEntity convertS3ObjectGrant(Grant grant) {
         GrantEntity grantEntity = null;
 

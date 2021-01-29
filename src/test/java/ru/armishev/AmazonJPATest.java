@@ -39,7 +39,7 @@ public class AmazonJPATest {
 
     @Test
     void download3ObjTest() {
-        amazonEntity.updateList();
+        amazonEntity.syncList();
 
         List<AmazonObjectEntity> databaseList = amazonObjectJPA.findAll();
 
@@ -48,7 +48,7 @@ public class AmazonJPATest {
 
     @Test
     void downloadOneObjLessTest() {
-        amazonEntity.updateList();
+        amazonEntity.syncList();
 
         amazonEntity.updateList2Elements();
 

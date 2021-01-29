@@ -3,6 +3,9 @@ package ru.armishev.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
+/*
+Владельцы файлов
+ */
 @Entity
 @Table(name="owners")
 public class OwnerEntity {

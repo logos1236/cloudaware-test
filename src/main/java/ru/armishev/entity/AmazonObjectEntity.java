@@ -11,6 +11,9 @@ import java.util.*;
 import java.util.Date;
 import java.util.Objects;
 
+/*
+Общая информация о файлах
+ */
 @Entity
 @Table(name="amazon_objects")
 public class AmazonObjectEntity {
@@ -31,7 +34,6 @@ public class AmazonObjectEntity {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="owner", insertable = true, updatable = true)
-    //@OnDelete(action = OnDeleteAction.CASCADE)
     private OwnerEntity ownerEntity;
 
     @Column(name = "storageClass")
@@ -42,7 +44,7 @@ public class AmazonObjectEntity {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<GrantEntity> grants;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name="versions", insertable = true, updatable = true)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<VersionEntity> versionEntities;
