@@ -27,7 +27,7 @@ public class AmazonControllerRest {
     }
 
     @GetMapping("")
-    public List<AmazonObjectEntity> getList(Model model, @RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int currentPage) {
+    public List<AmazonObjectEntity> getList(@RequestParam(name = "page", defaultValue = "0", required = false) @Min(0) int currentPage) {
         Pageable firstPageWithTwoElements = PageRequest.of(currentPage, COUNT_OBJ_ON_PAGE);
         Page<AmazonObjectEntity> page = amazonObjectJPA.findAll(firstPageWithTwoElements);
 
