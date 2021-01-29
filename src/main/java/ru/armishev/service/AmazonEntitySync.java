@@ -31,6 +31,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
      */
     @Override
     public void syncList() {
+        logger.info("Start sync iteration");
         List<AmazonObjectEntity> rawList = amazonService.getListAmazonObjectEntity();
         addOrUpdateObjectInDB(rawList);
 
@@ -44,6 +45,7 @@ public class AmazonEntitySync implements IAmazonEntitySync {
             List<AmazonObjectEntity> currentDatabaseList = amazonObjectJPA.findAll();
             deleteNotExistedObjectInDatabase(amazonService.getLoopFilesList(), currentDatabaseList);
         }
+        logger.info("End sync iteration");
     }
 
     /*

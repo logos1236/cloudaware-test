@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 */
 @Service
 public class AmazonService implements IAmazonService {
-    private static final int MAX_DOWNLOAD_CNT = 5;
-    private static final int MAX_DOWNLOAD_CNT_VERSION = 1;
+    private static final int MAX_DOWNLOAD_CNT = 2;
+    private static final int MAX_DOWNLOAD_CNT_VERSION = 10;
 
     private final Regions clientRegion;
     private final String bucketName;
